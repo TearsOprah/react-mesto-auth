@@ -9,6 +9,9 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import { Route, Routes } from "react-router-dom";
+import Register from "./Register";
+import Login from "./Login";
 
 function App() {
 
@@ -160,30 +163,48 @@ function App() {
   }, [isOpen])
 
 
-  return (
 
+
+  return (
     <CurrentUserContext.Provider value={currentUser}>
 
       <div className="page">
 
         <Header />
 
+        <Routes>
 
-        <Main onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              cards={cards}
-        />
+          <Route path={'/'} element={
 
+            <Main onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  cards={cards}
+            />
+          } />
+
+          <Route path={'/sign-up'} element={<Register />} />
+
+          <Route path={'/sign-in'} element={<Login />} />
+
+          <Route path={'*'}/>
+
+        </Routes>
 
         <Footer />
 
-        <EditProfilePopup isLoading={isLoading} onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} />
+        <EditProfilePopup isLoading={isLoading}
+                          onUpdateUser={handleUpdateUser}
+                          isOpen={isEditProfilePopupOpen}
+                          onClose={closeAllPopups} />
 
-        <AddPlacePopup isLoading={isLoading} onAddPlace={handleAddPlaceSubmit}  isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} />
+        <AddPlacePopup isLoading={isLoading}
+                       onAddPlace={handleAddPlaceSubmit}
+                       isOpen={isAddPlacePopupOpen}
+                       onClose={closeAllPopups} />
 
         <PopupWithForm isOpen={''}
                        onClose={closeAllPopups}
@@ -195,7 +216,10 @@ function App() {
 
         </PopupWithForm>
 
-        <EditAvatarPopup isLoading={isLoading} onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} />
+        <EditAvatarPopup isLoading={isLoading}
+                         onUpdateAvatar={handleUpdateAvatar}
+                         isOpen={isEditAvatarPopupOpen}
+                         onClose={closeAllPopups} />
 
         <ImagePopup card={selectedCard}
                     onClose={closeAllPopups}
