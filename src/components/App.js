@@ -165,6 +165,10 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
 
+  function handleLogin() {
+    setLoggedIn(true)
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
 
@@ -190,7 +194,7 @@ function App() {
 
           <Route path={'/sign-up'} element={<Register />} />
 
-          <Route path={'/sign-in'} element={<Login />} />
+          <Route path={'/sign-in'} element={<Login handleLogin={handleLogin} />} />
 
           <Route path={'*'} element={
             loggedIn ? (

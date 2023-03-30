@@ -24,8 +24,7 @@ export default function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { password, email } = formValue;
-    const user = { password, email }
-    auth.register(user).then((res) => {
+    auth.register({ password, email }).then((res) => {
       navigate('/sign-in', {replace: true})
     })
   }
