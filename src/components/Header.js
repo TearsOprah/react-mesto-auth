@@ -15,17 +15,17 @@ export default function Header({loggedIn, userData, handleLogout}) {
       {loggedIn ? (
         <nav className={'header__auth-nav'}>
           <p className={'header__email'}>{userData && userData.data.email}</p>
-          <button className={'header__link'} onClick={handleLogout}>Выйти</button>
+          <button className={'header__link header__link_logout hovered-link'} onClick={handleLogout}>Выйти</button>
         </nav>
       ) : (
         <nav className={'header__auth-nav'}>
           {/*если не залогинены и находимся на странице входа*/}
           {location.pathname === '/sign-in' && (
-            <NavLink to={"/sign-up"} className={'header__link'}>Регистрация</NavLink>
+            <NavLink to={"/sign-up"} className={'header__link hovered-link'}>Регистрация</NavLink>
           )}
           {/*если не залогинены и находимся на странице регистрации*/}
           {location.pathname === '/sign-up' && (
-            <NavLink to={'/sign-in'} className={'header__link'}>Войти</NavLink>
+            <NavLink to={'/sign-in'} className={'header__link hovered-link'}>Войти</NavLink>
           )}
 
         </nav>

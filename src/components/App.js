@@ -171,15 +171,16 @@ function App() {
   }
 
   function handleLogout() {
+    localStorage.removeItem('jwt');
     setLoggedIn(false)
   }
 
   const navigate = useNavigate();
 
-  // проверяем токен при загрузке
+  // проверяем токен
   useEffect(() => {
     handleTokenCheck()
-  }, [])
+  }, [loggedIn])
 
   // запишем data
   const [userData, setUserData] = useState('')
