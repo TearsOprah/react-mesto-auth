@@ -9,10 +9,11 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import {Navigate, Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
+import * as auth from "../utils/auth";
 
 function App() {
 
@@ -167,6 +168,36 @@ function App() {
 
   function handleLogin() {
     setLoggedIn(true)
+  }
+
+  const navigate = useNavigate();
+
+  // проверяем токен при загрузке
+  useEffect(() => {
+    handleTokenCheck()
+  }, [])
+
+  // проверка токена
+  const handleTokenCheck = () => {
+    /* проверим, существует ли токен в хранилище браузера*/
+    if (localStorage.getItem('jwt')){
+      const jwt = localStorage.getItem('jwt')// присвоим токен переменной
+      // вызовем метод auth.checkToken(), передающий этот токен
+      // внутри следующего then(), если там есть объект res,
+      // установим loggedIn значение true
+      auth.checkToken(jwt).then((res) => {
+        if (res){
+          setLoggedIn(true);
+
+          // перенаправим пользователя в /
+          navigate("/", {replace: true})
+        }
+      });
+    }
+
+
+
+
   }
 
   return (
