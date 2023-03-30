@@ -170,12 +170,19 @@ function App() {
     setLoggedIn(true)
   }
 
+  function handleLogout() {
+    setLoggedIn(false)
+  }
+
   const navigate = useNavigate();
 
   // проверяем токен при загрузке
   useEffect(() => {
     handleTokenCheck()
   }, [])
+
+  // запишем data
+  const [userData, setUserData] = useState('')
 
   // проверка токена
   const handleTokenCheck = () => {
@@ -187,17 +194,14 @@ function App() {
       // установим loggedIn значение true
       auth.checkToken(jwt).then((res) => {
         if (res){
+          const data = res;
           setLoggedIn(true);
-
+          setUserData(data); // добавляем data в state
           // перенаправим пользователя в /
           navigate("/", {replace: true})
         }
       });
     }
-
-
-
-
   }
 
   return (
@@ -205,7 +209,7 @@ function App() {
 
       <div className="page">
 
-        <Header loggedIn={loggedIn}/>
+        <Header userData={userData} loggedIn={loggedIn} handleLogout={handleLogout}/>
 
         <Routes>
 

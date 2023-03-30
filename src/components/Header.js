@@ -1,38 +1,35 @@
 import logoPath from "../images/header-logo.svg";
-import {Link, useLocation, NavLink} from "react-router-dom";
+import { useLocation, NavLink} from "react-router-dom";
 
 
 
-export default function Header({loggedIn, onLogout}) {
+export default function Header({loggedIn, userData, handleLogout}) {
 
-  // const location = useLocation();
-  //
-  // const handleLogout = () => {
-  //   onLogout()
-  // }
+  const location = useLocation();
 
   return (
     <header className="header">
       <img className="header__logo" src={logoPath} alt="логотип" />
 
-      {/*{loggedIn ? (*/}
-      {/*  <nav className={'header__auth-nav'}>*/}
-      {/*    <p className={'header__email'}>email@exapmle.com</p>*/}
-      {/*    <button className={'header__link'} onClick={handleLogout}>Выйти</button>*/}
-      {/*  </nav>*/}
-      {/*) : (*/}
-      {/*  <nav className={'header__auth-nav'}>*/}
+      {/*если залогинены - показываем email и кнопку выйти*/}
+      {loggedIn ? (
+        <nav className={'header__auth-nav'}>
+          <p className={'header__email'}>{userData && userData.data.email}</p>
+          <button className={'header__link'} onClick={handleLogout}>Выйти</button>
+        </nav>
+      ) : (
+        <nav className={'header__auth-nav'}>
+          {/*если не залогинены и находимся на странице входа*/}
+          {location.pathname === '/sign-in' && (
+            <NavLink to={"/sign-up"} className={'header__link'}>Регистрация</NavLink>
+          )}
+          {/*если не залогинены и находимся на странице регистрации*/}
+          {location.pathname === '/sign-up' && (
+            <NavLink to={'/sign-in'} className={'header__link'}>Войти</NavLink>
+          )}
 
-      {/*    {location.pathname === '/sign-in' && (*/}
-      {/*      <NavLink to={"/sign-in"} className={'header__link'}>Регистрация</NavLink>*/}
-      {/*    )}*/}
-
-      {/*    {location.pathname === '/sign-up' && (*/}
-      {/*      <NavLink to={'/sign-up'} className={'header__link'}>Войти</NavLink>*/}
-      {/*    )}*/}
-
-      {/*  </nav>*/}
-      {/*)}*/}
+        </nav>
+      )}
 
     </header>
   )
