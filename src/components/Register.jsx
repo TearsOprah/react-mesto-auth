@@ -83,8 +83,8 @@ export default function Register(props) {
 
       <AlertPopup onClose={handleCloseAlertPopup}
                   isOpen={props.isOpen}
-                  message={isRegistrationSuccessful ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так!\n' +
-                    'Попробуйте ещё раз.'}/>
+                  isRegistrationSuccessful={isRegistrationSuccessful}
+      />
 
     </>
   )
