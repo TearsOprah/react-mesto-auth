@@ -2,7 +2,6 @@ import logoPath from "../images/header-logo.svg";
 import { useLocation, NavLink} from "react-router-dom";
 
 
-
 export default function Header({loggedIn, userData, handleLogout}) {
 
   const location = useLocation();
