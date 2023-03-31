@@ -8,3 +8,9 @@
   text-align: center;
   color: #000000;
 }
+
+@media screen and (max-width: 568px) {
+  .popup__alert-text {
+    line-height: 24px;
+  }
+}
