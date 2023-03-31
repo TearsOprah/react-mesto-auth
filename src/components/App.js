@@ -79,6 +79,7 @@ function App() {
     setIsEditAvatarPopupOpen(false)
     setIsImagePopupOpen(false)
     setSelectedCard({})
+    setIsAlertPopupOpen(false)
   }
 
 
@@ -146,9 +147,11 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isAlertPopupOpen, setIsAlertPopupOpen] = useState(false)
+
 
   // переменная для слежения за всеми состояниями попапов
-  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link
+  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link || isAlertPopupOpen
 
   useEffect(() => {
     function closeByEscape(evt) {
@@ -205,6 +208,11 @@ function App() {
     }
   }
 
+  // // попап после регистрации
+  // const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
+
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
 
@@ -228,7 +236,12 @@ function App() {
 
           } />
 
-          <Route path={'/sign-up'} element={<Register />} />
+          <Route path={'/sign-up'}
+                 element={<Register
+                   onClose={closeAllPopups}
+                   isOpen={isAlertPopupOpen}
+                   setIsAlertPopupOpen={setIsAlertPopupOpen}/>}
+          />
 
           <Route path={'/sign-in'} element={<Login handleLogin={handleLogin} />} />
 
@@ -272,6 +285,19 @@ function App() {
         <ImagePopup card={selectedCard}
                     onClose={closeAllPopups}
                     isOpen={isImagePopupOpen}/>
+
+        {/*{isRegistrationSuccessful && <AlertPopup*/}
+        {/*  message={'Вы успешно зарегистрировались!'}*/}
+        {/*  onClose={closeAllPopups}*/}
+        {/*  isOpen={isAlertPopupOpen} />}*/}
+
+        {/*{!isRegistrationSuccessful && <AlertPopup*/}
+        {/*  message={'Что-то пошло не так!\n' +*/}
+        {/*  'Попробуйте ещё раз.'}*/}
+        {/*  onClose={closeAllPopups}*/}
+        {/*  isOpen={isAlertPopupOpen} />}*/}
+
+        {/*<AlertPopup onClose={closeAllPopups} isOpen={isAlertPopupOpen} />*/}
 
       </div>
     </CurrentUserContext.Provider>
