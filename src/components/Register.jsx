@@ -30,15 +30,18 @@ export default function Register(props) {
     const { password, email } = formValue;
     auth.register({ password, email })
       .then((res) => {
+
         // если пришел ответ с data -> регистрация успешная
         if (res.data) {
           setIsRegistrationSuccessful(true)
           props.setIsAlertPopupOpen(true)
-        } else {
-          setIsRegistrationSuccessful(false)
-          props.setIsAlertPopupOpen(true)
         }
     })
+      .catch(() => {
+        // если ошибка -> регистрация неуспешная
+        setIsRegistrationSuccessful(false)
+        props.setIsAlertPopupOpen(true)
+      })
   }
 
   // закрываем попап
