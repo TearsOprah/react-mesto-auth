@@ -1,79 +1,41 @@
 import {Link, useNavigate} from "react-router-dom";
-import * as auth from "../utils/auth";
-import {useState} from "react";
 import AlertPopup from "./AlertPopup";
 
 
 export default function Register(props) {
 
-  const [formValue, setFormValue] = useState({
-    email: '',
-    password: '',
-  })
-
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value
-    });
-  }
-
-  const [isRegistrationSuccessful, setIsRegistrationSuccessful] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsRegistrationSuccessful(false); // сбрасываем значение перед каждым запросом к API
-    const { password, email } = formValue;
-    auth.register({ password, email })
-      .then((res) => {
-
-        // если пришел ответ с data -> регистрация успешная
-        if (res.data) {
-          setIsRegistrationSuccessful(true)
-          props.setIsAlertPopupOpen(true)
-        }
-    })
-      .catch(() => {
-        // если ошибка -> регистрация неуспешная
-        setIsRegistrationSuccessful(false)
-        props.setIsAlertPopupOpen(true)
-      })
-  }
 
   // закрываем попап
   const handleCloseAlertPopup = () => {
     props.setIsAlertPopupOpen(false)
     props.onClose()
     // если регистрация успешная -> перенаправляем на станицу входа
-    if (isRegistrationSuccessful) {
+    if (props.isRegistrationSuccessful) {
       navigate('/sign-in', {replace: true})
     }
     // сбрасываем стейт успешности регистрации
-    setIsRegistrationSuccessful(false)
+    props.setIsRegistrationSuccessful(false)
   }
 
   return (
     <>
       <div className={'login'}>
         <h2 className={'login__title'}>Регистрация</h2>
-        <form onSubmit={handleSubmit}
+        <form onSubmit={props.handleSubmitRegistration}
               className={'login__form'}>
           <input id={'email'}
                  name="email"
-                 onChange={handleChange}
-                 value={formValue.email}
+                 onChange={props.handleChange}
+                 value={props.formValue.email}
                  className={'login__input'}
                  type={'email'}
                  placeholder={'Email'}
                  required/>
-          <input onChange={handleChange}
+          <input onChange={props.handleChange}
                  id={'password'}
                  name="password"
-                 value={formValue.password}
+                 value={props.formValue.password}
                  className={'login__input'}
                  type={'password'}
                  placeholder={'Пароль'}
@@ -86,7 +48,7 @@ export default function Register(props) {
 
       <AlertPopup onClose={handleCloseAlertPopup}
                   isOpen={props.isOpen}
-                  isRegistrationSuccessful={isRegistrationSuccessful}
+                  isRegistrationSuccessful={props.isRegistrationSuccessful}
       />
 
     </>

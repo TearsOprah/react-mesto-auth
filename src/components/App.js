@@ -208,9 +208,46 @@ function App() {
     }
   }
 
-  // // попап после регистрации
-  // const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
+  // регистрация
 
+  // состояние полей в форме регистрации
+  const [formValue, setFormValue] = useState({
+    email: '',
+    password: '',
+  })
+
+  // изменение полей
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+
+    setFormValue({
+      ...formValue,
+      [name]: value
+    });
+  }
+
+  // состояние успешности регистрации
+  const [isRegistrationSuccessful, setIsRegistrationSuccessful] = useState(false);
+
+  const handleSubmitRegistration = (e) => {
+    e.preventDefault();
+    setIsRegistrationSuccessful(false); // сбрасываем значение перед каждым запросом к API
+    const { password, email } = formValue;
+    auth.register({ password, email })
+      .then((res) => {
+
+        // если пришел ответ с data -> регистрация успешная
+        if (res.data) {
+          setIsRegistrationSuccessful(true)
+          setIsAlertPopupOpen(true)
+        }
+      })
+      .catch(() => {
+        // если ошибка -> регистрация неуспешная
+        setIsRegistrationSuccessful(false)
+        setIsAlertPopupOpen(true)
+      })
+  }
 
 
   return (
@@ -238,6 +275,11 @@ function App() {
 
           <Route path={'/sign-up'}
                  element={<Register
+                   formValue={formValue}
+                   handleChange={handleChange}
+                   setIsRegistrationSuccessful={setIsRegistrationSuccessful}
+                   isRegistrationSuccessful={isRegistrationSuccessful}
+                   handleSubmitRegistration={handleSubmitRegistration}
                    onClose={closeAllPopups}
                    isOpen={isAlertPopupOpen}
                    setIsAlertPopupOpen={setIsAlertPopupOpen}/>}
