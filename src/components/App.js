@@ -196,7 +196,8 @@ function App() {
       // вызовем метод auth.checkToken(), передающий этот токен
       // внутри следующего then(), если там есть объект res,
       // установим loggedIn значение true
-      auth.checkToken(jwt).then((res) => {
+      auth.checkToken(jwt)
+        .then((res) => {
         if (res){
           const data = res;
           setLoggedIn(true);
@@ -204,7 +205,10 @@ function App() {
           // перенаправим пользователя в /
           navigate("/", {replace: true})
         }
-      });
+      })
+        .catch((err) => {
+          console.log(err)
+        });
     }
   }
 
@@ -242,11 +246,37 @@ function App() {
           setIsAlertPopupOpen(true)
         }
       })
-      .catch(() => {
+      .catch((err) => {
         // если ошибка -> регистрация неуспешная
         setIsRegistrationSuccessful(false)
         setIsAlertPopupOpen(true)
+        console.log(err)
       })
+  }
+
+  // авторизация
+  const handleSubmitLogin = (e) => {
+    e.preventDefault();
+
+    if (!formValue.email || !formValue.password){
+      return;
+    }
+
+    auth.authorize(formValue.email, formValue.password)
+      .then((data) => {
+        // нужно проверить, есть ли у данных jwt
+        if (data.token){
+          // сохраняем токен в localStorage
+          localStorage.setItem('jwt', data.token);
+          // сбросить стейт, затем в колбэке установить
+          // стейт loggedIn родительского App как true,
+          setFormValue({email: '', password: ''});
+          handleLogin()
+          // перенаправьте его в /
+          navigate('/', {replace: true});
+        }
+      })
+      .catch(err => console.log(err));
   }
 
 
@@ -285,7 +315,13 @@ function App() {
                    setIsAlertPopupOpen={setIsAlertPopupOpen}/>}
           />
 
-          <Route path={'/sign-in'} element={<Login handleLogin={handleLogin} />} />
+          <Route path={'/sign-in'} element={
+            <Login
+              handleLogin={handleLogin}
+              handleSubmitLogin={handleSubmitLogin}
+              formValue={formValue}
+              handleChange={handleChange}
+            />} />
 
           <Route path={'*'} element={
             loggedIn ? (
@@ -327,19 +363,6 @@ function App() {
         <ImagePopup card={selectedCard}
                     onClose={closeAllPopups}
                     isOpen={isImagePopupOpen}/>
-
-        {/*{isRegistrationSuccessful && <AlertPopup*/}
-        {/*  message={'Вы успешно зарегистрировались!'}*/}
-        {/*  onClose={closeAllPopups}*/}
-        {/*  isOpen={isAlertPopupOpen} />}*/}
-
-        {/*{!isRegistrationSuccessful && <AlertPopup*/}
-        {/*  message={'Что-то пошло не так!\n' +*/}
-        {/*  'Попробуйте ещё раз.'}*/}
-        {/*  onClose={closeAllPopups}*/}
-        {/*  isOpen={isAlertPopupOpen} />}*/}
-
-        {/*<AlertPopup onClose={closeAllPopups} isOpen={isAlertPopupOpen} />*/}
 
       </div>
     </CurrentUserContext.Provider>
